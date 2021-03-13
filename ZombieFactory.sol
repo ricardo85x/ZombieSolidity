@@ -26,9 +26,8 @@ contract ZombieFactory {
     mapping (address => uint ) ownerZombieCount;
 
 
-    function _createZombie(string memory _name, uint dna) private {
+    function _createZombie(string memory _name, uint dna) internal {
         uint id = zombies.push(Zombie(_name, _dna)) -1;
-
         // o dono do zombi é quem executou esta função
         zombieToOwner[id] = msg.sender;
         // incrementa o numero de zombies que o usuario tem;
