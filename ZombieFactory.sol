@@ -21,12 +21,18 @@ contract ZombieFactory {
     // array de zombies
     Zombie[] public zombies;
 
+    // key -> value 
     mapping (uint => address ) public zombieToOwner;
     mapping (address => uint ) ownerZombieCount;
 
 
     function _createZombie(string memory _name, uint dna) private {
         uint id = zombies.push(Zombie(_name, _dna)) -1;
+
+        // o dono do zombi é quem executou esta função
+        zombieToOwner[id] = msg.sender;
+        // incrementa o numero de zombies que o usuario tem;
+        ownerZombieCount[msg.sender]++;
         // envia  um evento sempre que um zombie é criado
         emit NewZombie(id, _name, _dna);
     }
@@ -40,8 +46,15 @@ contract ZombieFactory {
     }
 
     function createRandomZombie(string memory _name) public {
+        
+        // endereço só pode ser chamado 1x esta função
+        require(ownerZombieCount[msg.sender] == 0);
         uint randDNa = _generateRandomDna(_name);
         _createZombie(_name, randDna);
     }
 
+
 }
+
+
+// contrato para tratar a alimentação
