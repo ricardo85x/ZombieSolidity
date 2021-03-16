@@ -1,7 +1,9 @@
 pragma solidity >=0.5.0 <0.6.0;
 
+import "./Ownable.sol";
 
-contract ZombieFactory {
+
+contract ZombieFactory is Ownable{
 
     // evento
     event NewZombie(uint zombieId, string name, uint dna);
@@ -12,10 +14,15 @@ contract ZombieFactory {
     // 10 * 10 = 100, 10 * 10 * 10 = 1.000, 10 * 10 * 10 * 10 = 10.000
     // logo este dnaModulus é 1 + 16 zeros = 10,000,000,000,000,000
 
+    uint cooldownTime = 1 days;
+
+
     // objeto do tipo zombie
     struct Zombie {
         string name;
         uint dna;
+        uint32 level;
+        uint32 readyTime;
     }
 
     // array de zombies
@@ -27,7 +34,7 @@ contract ZombieFactory {
 
 
     function _createZombie(string memory _name, uint dna) internal {
-        uint id = zombies.push(Zombie(_name, _dna)) -1;
+        uint id = zombies.push(Zombie(_name, _dna, 1, uint32(now + cooldownTime))) -1;
         // id = index do array do item adicionado
 
         // o dono do zombi é quem executou esta função
