@@ -7,7 +7,7 @@ contract ZombieFactory {
     event NewZombie(uint zombieId, string name, uint dna);
 
     uint dnaDigits = 16;
-    uint dnaModulus = 10 ** dnaDigits; // 10 elevado a 16
+    uint dnaModulus = 10 ** dnaDigits; // 10 elevado a 16 (10,000,000,000,000,000)
     // exemplo
     // 10 * 10 = 100, 10 * 10 * 10 = 1.000, 10 * 10 * 10 * 10 = 10.000
     // logo este dnaModulus é 1 + 16 zeros = 10,000,000,000,000,000
@@ -28,6 +28,8 @@ contract ZombieFactory {
 
     function _createZombie(string memory _name, uint dna) internal {
         uint id = zombies.push(Zombie(_name, _dna)) -1;
+        // id = index do array do item adicionado
+
         // o dono do zombi é quem executou esta função
         zombieToOwner[id] = msg.sender;
         // incrementa o numero de zombies que o usuario tem;
@@ -38,6 +40,9 @@ contract ZombieFactory {
 
     // cria um dna (numero de 16 digitos) de acordo com o nome 
     function _generateRandomDna(string memory _str) private view returns (uint) {
+        // por padrão todo argumento da função é memory.
+        // mas este exemplo gosta de ser redundante
+
         // o keccak256 é um gera um sha256, convertemos ele para numero
         // e abaixo pegamos apenas os 16 digitos dele.
         uint rand = uint(keccak256(abi.encodePacked(_str)));
