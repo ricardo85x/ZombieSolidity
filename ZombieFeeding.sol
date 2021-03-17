@@ -41,6 +41,7 @@ contract ZombieFeeding is ZombieFactory {
     Zombie storage myZombie = zombies[_zombieId];
 
     _targetDna = _targetDna % dnaModulus;
+    require(_isReady(myZombie));
     uint newDna = (myZombie.dna + _targetDna) / 2;
 
     if(keccak256(_species) == keccak256("kitty")){
@@ -49,6 +50,8 @@ contract ZombieFeeding is ZombieFactory {
     }
 
     _createZombie("NoName", newDna);
+    _triggerCooldown(myZombie);
+
 
   }
 
