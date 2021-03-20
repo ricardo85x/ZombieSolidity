@@ -23,6 +23,8 @@ contract ZombieFactory is Ownable{
         uint dna;
         uint32 level;
         uint32 readyTime;
+        uint16 winCount;
+        uint16 lossCount;
     }
 
     // array de zombies
@@ -34,7 +36,7 @@ contract ZombieFactory is Ownable{
 
 
     function _createZombie(string memory _name, uint dna) internal {
-        uint id = zombies.push(Zombie(_name, _dna, 1, uint32(now + cooldownTime))) -1;
+        uint id = zombies.push(Zombie(_name, _dna, 1, uint32(now + cooldownTime), 0, 0)) - 1;
         // id = index do array do item adicionado
 
         // o dono do zombi é quem executou esta função
